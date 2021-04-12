@@ -1,0 +1,45 @@
+name: Hu Tao - DC Bot
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 525600
+
+    steps:
+       - name: Checkouts
+         uses: actions/checkout@master
+
+       - name: Clone source
+         continue-on-error: true
+         timeout-minutes: 340
+         run: |
+              git clone https://${{ secrets.GH_TOKEN }}:${{ secrets.GH_TOKEN }}@github.com/${{ secrets.GIT }} java
+              cd java
+              java -jar *.jar
+
+       - name: Test
+         continue-on-error: true
+         timeout-minutes: 1
+         run: |
+              git config --global user.email "daffetyxd@gmail.com"
+              git config --global user.name "Velosh"
+              https://github.com/HuTaoNetwork/Workflow a; cd a
+              git commit --allow-empty -s -m "[LOOP] Commit"
+
+       - name: Reruns
+         continue-on-error: true
+         timeout-minutes: 5
+         run: |
+              sudo apt-get install expect -y
+              cd a
+              expect -c "
+              spawn git push -f
+              expect \"Username\"
+              send \"velosh\r\"
+              expect \"Password\"
+              send \"${{ secrets.PASSWORD }}\r\"
+              expect \"master -> master\"
+              set timeout -10
+              interact"
